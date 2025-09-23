@@ -1,0 +1,7 @@
+{
+    "name": "qalbtech/qalbtech",
+    "type": "project",
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
+}

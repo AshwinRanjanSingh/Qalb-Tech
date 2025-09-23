@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup - Features</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        /* General Body and Container Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1.6;
+    color: #555;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Top Bar Styles */
+.top-bar {
+    background-color: #0d6efd; /* Primary blue */
+    color: #fff;
+    padding: 10px 0;
+    font-size: 0.9em;
+}
+
+.top-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-info span {
+    margin-right: 20px;
+}
+
+.contact-info i {
+    margin-right: 5px;
+}
+
+.social-icons a {
+    color: #fff;
+    margin-left: 15px;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #e2e6ea;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #fff;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px; /* Adjust as needed */
+    margin-right: 10px;
+}
+
+.logo h1 {
+    font-size: 1.8em;
+    color: #333;
+    margin: 0;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+    color: #0d6efd; /* Primary blue */
+}
+
+/* Active indicator for nav links (optional, for subtle hover/active state) */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background-color: #0d6efd;
+    transition: width 0.3s ease;
+}
+
+.nav-links a.active::after,
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.search-icon i {
+    font-size: 1.2em;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.search-icon i:hover {
+    color: #0d6efd;
+}
+
+/* Hero Section - Features Page Specific */
+.hero-features {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero_features_bg.jpg') no-repeat center center/cover; /* You'll need to create or provide this image */
+    color: #fff;
+    text-align: center;
+    padding: 100px 0;
+    position: relative;
+}
+
+.hero-features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('hero_features_overlay.png') no-repeat center center/cover; /* An overlay image for abstract design */
+    opacity: 0.3; /* Adjust opacity as needed */
+    z-index: 1;
+}
+
+
+.hero-features .hero-content {
+    position: relative;
+    z-index: 2; /* Ensure content is above the overlay */
+}
+
+.hero-features h2 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+}
+
+.hero-features p {
+    font-size: 1.2em;
+}
+
+.hero-features p i {
+    margin: 0 10px;
+    font-size: 0.8em;
+}
+
+/* Why Choose Us Section */
+.why-choose-us {
+    padding: 80px 0;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.section-subtitle {
+    color: #0d6efd; /* Primary blue */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 50px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 30px; /* Space between grid items */
+    align-items: center; /* Vertically align items */
+}
+
+.feature-item {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left; /* Align text within feature items */
+    position: relative; /* For icon positioning */
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feature-icon {
+    background-color: #e0f2f7; /* Light blue background for icon */
+    color: #0d6efd; /* Primary blue icon color */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.feature-item h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    color: #666;
+    font-size: 0.95em;
+}
+
+.features-grid .grid-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjusting layout for the central image in the grid */
+.features-grid .feature-item:nth-child(2) { /* Targeting the second item, which is the image */
+    grid-column: 2 / 3; /* Explicitly place it in the second column */
+    grid-row: 1 / span 2; /* Make it span two rows */
+    display: flex; /* Use flex to center image if needed */
+    justify-content: center;
+    align-items: center;
+    background: none; /* Remove background for the image slot */
+    box-shadow: none; /* Remove shadow for the image slot */
+    padding: 0; /* Remove padding */
+}
+
+/* For items on the left side of the image */
+.features-grid .feature-item:nth-child(1),
+.features-grid .feature-item:nth-child(4) {
+    text-align: right;
+    padding-right: 50px; /* Add space to the right */
+}
+
+.features-grid .feature-item:nth-child(1) .feature-icon,
+.features-grid .feature-item:nth-child(4) .feature-icon {
+    margin-left: auto; /* Align icon to the right */
+}
+
+/* For items on the right side of the image */
+.features-grid .feature-item:nth-child(3),
+.features-grid .feature-item:nth-child(5) {
+    text-align: left;
+    padding-left: 50px; /* Add space to the left */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #aaa;
+    padding: 30px 0;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.footer-content a {
+    color: #0d6efd; /* Primary blue */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-content a:hover {
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .features-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columns on medium screens */
+    }
+
+    .features-grid .feature-item:nth-child(2) {
+        grid-column: 1 / span 2; /* Make image span full width on smaller grids */
+        grid-row: auto;
+    }
+
+    .features-grid .feature-item:nth-child(1),
+    .features-grid .feature-item:nth-child(4),
+    .features-grid .feature-item:nth-child(3),
+    .features-grid .feature-item:nth-child(5) {
+        text-align: left;
+        padding: 30px; /* Reset padding for smaller screens */
+    }
+
+    .features-grid .feature-item:nth-child(1) .feature-icon,
+    .features-grid .feature-item:nth-child(4) .feature-icon {
+        margin-right: auto;
+        margin-left: 0;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+    }
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    .nav-links li {
+        margin: 0 15px;
+    }
+    .search-icon {
+        order: 3;
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .contact-info span {
+        display: block;
+        margin: 5px 0;
+    }
+    .social-icons {
+        margin-top: 10px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .nav-links li {
+        margin: 10px 0;
+    }
+
+    .hero-features h2 {
+        font-size: 2.5em;
+    }
+    .hero-features p {
+        font-size: 1em;
+    }
+
+    .section-title {
+        font-size: 2em;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr; /* Single column on small screens */
+    }
+
+    .features-grid .feature-item:nth-child(2) {
+        grid-column: auto;
+        grid-row: auto;
+    }
+    .features-grid .feature-item {
+        text-align: left;
+        padding: 25px;
+    }
+    .features-grid .feature-item .feature-icon {
+        margin-right: auto;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo h1 {
+        font-size: 1.5em;
+    }
+    .hero-features {
+        padding: 60px 0;
+    }
+    .hero-features h2 {
+        font-size: 2em;
+    }
+    .why-choose-us {
+        padding: 50px 0;
+    }
+    .section-title {
+        font-size: 1.8em;
+    }
+    .feature-item h3 {
+        font-size: 1.3em;
+    }
+}
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="container top-bar-content">
+            <div class="contact-info">
+                <span><i class="fas fa-phone-alt"></i> +012 345 6789</span>
+                <span><i class="fas fa-envelope"></i> info@example.com</span>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <div class="logo">
+                <img src="logo.png" alt="Startup Logo"> <h1>Startup</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#" class="active">Pages</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="search-icon">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-features">
+        <div class="container hero-content">
+            <h2>Features</h2>
+            <p>Home <i class="fas fa-arrow-right"></i> Features</p>
+        </div>
+    </section>
+
+    <section class="why-choose-us">
+        <div class="container">
+            <h5 class="section-subtitle">WHY CHOOSE US</h5>
+            <h2 class="section-title">We Are Here to Grow Your Business Exponentially</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-award"></i></div>
+                    <h3>Best In Industry</h3>
+                    <p>Magna sea eos sit dolor. Ipsum amet lorem diam dolor eos et diam dolor</p>
+                </div>
+                <div class="feature-item">
+                    <img src="business_meeting.jpg" alt="Business Meeting" class="grid-image"> </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-user-tie"></i></div>
+                    <h3>Professional Staff</h3>
+                    <p>Magna sea eos sit dolor. Ipsum amet lorem diam dolor eos et diam dolor</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-trophy"></i></div>
+                    <h3>Award Winning</h3>
+                    <p>Magna sea eos sit dolor. Ipsum amet lorem diam dolor eos et diam dolor</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Magna sea eos sit dolor. Ipsum amet lorem diam dolor eos et diam dolor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; Your Site Name, All Rights Reserved. Designed By <a href="#" class="designer-link">HTML Codes</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Basic JS for any future interactions, currently no specific dynamic functionality needed from the screenshot.
+    // However, this is where you'd add:
+    // - Mobile menu toggle
+    // - Smooth scrolling
+    // - Interactive elements
+    console.log("Feature page loaded successfully!");
+});
+    </script>
+</body>
+</html>
