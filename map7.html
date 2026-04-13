@@ -1,0 +1,220 @@
+<!--
+New Modern Country Selector
+Completely new layout design — vertical card layout with sidebar and soft blue-white palette
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Modern Country Selector</title>
+<style>
+  :root {
+    --blue: #1e6ff9;
+    --light-blue: #f2f6ff;
+    --white: #ffffff;
+    --gray: #333;
+    --radius: 14px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    font-family: 'Poppins', system-ui, sans-serif;
+  }
+  body {
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    background: var(--light-blue);
+    color: var(--gray);
+  }
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar h2 {
+    color: var(--blue);
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tab {
+    background: var(--light-blue);
+    border: 1px solid #d8e4ff;
+    color: var(--blue);
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .tab.active, .tab:hover {
+    background: var(--blue);
+    color: var(--white);
+  }
+  /* Main content */
+  .content {
+    flex: 1;
+    padding: 30px 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .search input {
+    width: 300px;
+    padding: 10px 14px;
+    border: 1px solid #d0defc;
+    border-radius: 8px;
+    background: var(--white);
+    font-size: 14px;
+    outline: none;
+  }
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .country-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  .country-card:hover {
+    transform: translateY(-5px);
+  }
+  .flag {
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .flag img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .country-name {
+    font-weight: 600;
+    color: var(--blue);
+    text-align: center;
+  }
+  .view-more {
+    margin: 30px auto 0;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .empty {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>Regions</h2>
+    <div class="tabs">
+      <button class="tab active" data-region="all">Popular</button>
+      <button class="tab" data-region="Asia">Asia</button>
+      <button class="tab" data-region="Europe">Europe</button>
+      <button class="tab" data-region="Americas">Americas</button>
+      <button class="tab" data-region="Africa">Africa</button>
+      <button class="tab" data-region="Oceania">Oceania</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="search">
+      <h1>Country Selector</h1>
+      <input type="text" id="searchInput" placeholder="Search countries...">
+    </div>
+
+    <div id="grid" class="country-grid"></div>
+    <div id="empty" class="empty" style="display:none;">No countries found.</div>
+    <button id="viewMore" class="view-more">View More Countries</button>
+  </main>
+
+<script>
+const countries = [
+  {name:'United States',iso:'us',region:'Americas'},
+  {name:'Canada',iso:'ca',region:'Americas'},
+  {name:'United Kingdom',iso:'gb',region:'Europe'},
+  {name:'Australia',iso:'au',region:'Oceania'},
+  {name:'Germany',iso:'de',region:'Europe'},
+  {name:'France',iso:'fr',region:'Europe'},
+  {name:'Japan',iso:'jp',region:'Asia'},
+  {name:'China',iso:'cn',region:'Asia'},
+  {name:'India',iso:'in',region:'Asia'},
+  {name:'Brazil',iso:'br',region:'Americas'},
+  {name:'Italy',iso:'it',region:'Europe',extra:true},
+  {name:'Spain',iso:'es',region:'Europe',extra:true},
+  {name:'South Africa',iso:'za',region:'Africa',extra:true},
+  {name:'Mexico',iso:'mx',region:'Americas',extra:true},
+];
+
+const grid=document.getElementById('grid');
+const searchInput=document.getElementById('searchInput');
+const tabs=document.querySelectorAll('.tab');
+const empty=document.getElementById('empty');
+const viewMoreBtn=document.getElementById('viewMore');
+let activeRegion='all';
+let showExtra=false;
+
+function render(){
+  const q=searchInput.value.toLowerCase();
+  grid.innerHTML='';
+  const filtered=countries.filter(c=>{
+    if(!showExtra && c.extra)return false;
+    if(activeRegion!=='all'&&c.region!==activeRegion)return false;
+    if(q&&!c.name.toLowerCase().includes(q))return false;
+    return true;
+  });
+  if(filtered.length===0){empty.style.display='block';return;}else{empty.style.display='none';}
+  filtered.forEach(c=>{
+    const card=document.createElement('div');
+    card.className='country-card';
+    card.innerHTML=`<div class='flag'><img src='https://flagcdn.com/w80/${c.iso}.png' alt='${c.name}'></div><div class='country-name'>${c.name}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  activeRegion=t.dataset.region;
+  render();
+}));
+
+searchInput.addEventListener('input',render);
+viewMoreBtn.addEventListener('click',()=>{
+  showExtra=!showExtra;
+  viewMoreBtn.textContent=showExtra?'View Fewer Countries':'View More Countries';
+  render();
+});
+render();
+</script>
+</body>
+</html>

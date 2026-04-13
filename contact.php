@@ -34,6 +34,83 @@ $msg = $_GET['msg'] ?? null;
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <style>
+    /* --- 1. General Dropdown Menu Styling and Hiding --- */
+
+/* Initially hide both the main dropdown and all submenus */
+.dropdown-menu,
+.subdropdown {
+    display: none;
+    position: absolute;
+    /* Basic styling to make the menu visible */
+    background-color: #ffffff; /* Use your desired background color */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; /* Ensure it appears above other content */
+    min-width: 250px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Make sure the main dropdown is positioned under the Services link */
+.nav-item.dropdown {
+    position: relative; /* Crucial for positioning the dropdown-menu */
+}
+
+/* Position the main dropdown menu */
+.nav-item.dropdown .dropdown-menu {
+    top: 100%; /* Place it right below the main Services link */
+    left: 0;
+}
+
+
+/* --- 2. Multi-Level Submenu Positioning and Hiding --- */
+
+/* The parent item for the submenu needs relative positioning */
+.has-subdropdown {
+    position: relative; 
+}
+
+/* Position the submenu */
+.has-subdropdown .subdropdown {
+    top: 0; 
+    left: 100%; /* Pushes the submenu to the right of its parent item */
+    /* Add a slight horizontal shift to prevent jitter on hover */
+    margin-left: 1px; 
+}
+
+/* Style the submenu links to look like dropdown items */
+.subdropdown a {
+    display: block;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #000;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.subdropdown a:hover {
+    color: var(--primary); /* Use your primary theme color */
+    background-color: #f8f9fa;
+}
+
+
+/* --- 3. Hover Logic (Showing the Menus) --- */
+
+/* A. Show the main dropdown menu when hovering over 'Services' */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+/* B. Show the submenu when hovering over the parent item (e.g., 'CRM Solutions') */
+.has-subdropdown:hover > .subdropdown {
+    display: block;
+}
+</style>
 </head>
 
 <body>
@@ -91,7 +168,7 @@ include('header.php');
                 <h5 class="fw-bold text-primary text-uppercase">Contact Us</h5>
                 <h1 class="mb-0">If You Have Any Query, Feel Free To Contact Us</h1>
             </div>
-            <div class="row g-5 mb-5">
+            <div class="row g-5 mb-5" style="display:flex; justify-content: space-around;">
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center wow fadeIn" data-wow-delay="0.1s">
                         <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
@@ -114,7 +191,7 @@ include('header.php');
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4">
                     <div class="d-flex align-items-center wow fadeIn" data-wow-delay="0.8s">
                         <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
                             <i class="fa fa-map-marker-alt text-white"></i>
@@ -124,7 +201,7 @@ include('header.php');
                             <h4 class="text-primary mb-0">123 Street, NY, USA</h4>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="row g-5">
                 <div class="col-lg-6 wow slideInUp" data-wow-delay="0.3s">
@@ -161,23 +238,23 @@ include('header.php');
 
 
     <!-- Vendor Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5 mb-5">
             <div class="bg-white">
                 <div class="owl-carousel vendor-carousel">
-                    <img src="img/vendor-1.jpg" alt="">
-                    <img src="img/vendor-2.jpg" alt="">
-                    <img src="img/vendor-3.jpg" alt="">
-                    <img src="img/vendor-4.jpg" alt="">
-                    <img src="img/vendor-5.jpg" alt="">
-                    <img src="img/vendor-6.jpg" alt="">
-                    <img src="img/vendor-7.jpg" alt="">
-                    <img src="img/vendor-8.jpg" alt="">
-                    <img src="img/vendor-9.jpg" alt="">
+                    <img src="img/vendor-1.webp" alt="">
+                    <img src="img/vendor-2.webp" alt="">
+                    <img src="img/vendor-3.webp" alt="">
+                    <img src="img/vendor-4.webp" alt="">
+                    <img src="img/vendor-5.webp" alt="">
+                    <img src="img/vendor-6.webp" alt="">
+                    <img src="img/vendor-7.webp" alt="">
+                    <img src="img/vendor-8.webp" alt="">
+                    <img src="img/vendor-9.webp" alt="">
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Vendor End -->
 
 <?php

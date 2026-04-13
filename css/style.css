@@ -137,7 +137,7 @@ h6,
 }
 
 .sticky-top.navbar-dark .navbar-nav .nav-link {
-    padding: 20px 0;
+    /* padding: 20px 0; */
     color: var(--dark);
 }
 
@@ -164,7 +164,7 @@ h6,
     .navbar-dark .navbar-nav .nav-link,
     .navbar-dark .navbar-nav .nav-link.show,
     .sticky-top.navbar-dark .navbar-nav .nav-link {
-        padding: 10px 0;
+        padding: 0px 0;
         color: var(--dark);
     }
 
@@ -472,17 +472,17 @@ h6,
 }
 
 .bg-header {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/aboutt.png) center center no-repeat;
+    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/aboutt.webp) center center no-repeat;
     background-size: cover;
     height: 500px;
 }
 .bg-header1 {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/services.jpg) center center no-repeat;
+    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/services.webp) center center no-repeat;
     background-size: cover;
     height: 500px;
 }
 .bg-header2 {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/contact.jpg) center center no-repeat;
+    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/contact.webp) center center no-repeat;
     background-size: cover;
     height: 500px;
     
@@ -490,12 +490,12 @@ h6,
 
 }
 .bg-header3 {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/privacy.jpg) center center no-repeat;
+    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/privacy.webp) center center no-repeat;
     background-size: cover;
     height: 500px;
 }
 .bg-header4 {
-    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/terms.jpg) center center no-repeat;
+    background: linear-gradient(rgba(9, 30, 62, .7), rgba(9, 30, 62, .7)), url(../img/terms.webp) center center no-repeat;
     background-size: cover;
     height: 500px;
 }

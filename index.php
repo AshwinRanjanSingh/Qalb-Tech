@@ -36,7 +36,86 @@ $msg_signup    = $_GET['msg_signup'] ?? null;
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
+    <link href="css/nav.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+
+<style>
+    /* --- 1. General Dropdown Menu Styling and Hiding --- */
+
+/* Initially hide both the main dropdown and all submenus */
+.dropdown-menu,
+.subdropdown {
+    display: none;
+    position: absolute;
+    /* Basic styling to make the menu visible */
+    background-color: #ffffff; /* Use your desired background color */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; /* Ensure it appears above other content */
+    min-width: 250px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Make sure the main dropdown is positioned under the Services link */
+.nav-item.dropdown {
+    position: relative; /* Crucial for positioning the dropdown-menu */
+}
+
+/* Position the main dropdown menu */
+.nav-item.dropdown .dropdown-menu {
+    top: 100%; /* Place it right below the main Services link */
+    left: 0;
+}
+
+
+/* --- 2. Multi-Level Submenu Positioning and Hiding --- */
+
+/* The parent item for the submenu needs relative positioning */
+.has-subdropdown {
+    position: relative; 
+}
+
+/* Position the submenu */
+.has-subdropdown .subdropdown {
+    top: 0; 
+    left: 100%; /* Pushes the submenu to the right of its parent item */
+    /* Add a slight horizontal shift to prevent jitter on hover */
+    margin-left: 1px; 
+}
+
+/* Style the submenu links to look like dropdown items */
+.subdropdown a {
+    display: block;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #000;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.subdropdown a:hover {
+    color: var(--primary); /* Use your primary theme color */
+    background-color: #f8f9fa;
+}
+
+
+/* --- 3. Hover Logic (Showing the Menus) --- */
+
+/* A. Show the main dropdown menu when hovering over 'Services' */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+/* B. Show the submenu when hovering over the parent item (e.g., 'CRM Solutions') */
+.has-subdropdown:hover > .subdropdown {
+    display: block;
+}
+</style>
 <style>
 .status-card {
   padding: 12px 18px;
@@ -69,6 +148,66 @@ $msg_signup    = $_GET['msg_signup'] ?? null;
 }
 </style>
 
+<!--  -->
+<style>
+    /* Default desktop height */
+#header-carousel .carousel-item img {
+    height: 400px;
+    max-height: 700px; /* adjust height */
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Mobile view height */
+@media (max-width: 576px) {
+  #header-carousel .carousel-item img {
+     max-height: 400px;
+    height: 400px; /* 👈 yahan apni marzi ka height set karo */
+  }
+
+  #header-carousel .carousel-caption {
+    margin-top: 0 !important; /* caption thoda adjust */
+  }
+
+  #header-carousel h1 {
+    font-size: 1.8rem; /* text thoda chhota kar do */
+  }
+
+  #header-carousel h5 {
+    font-size: 0.9rem;
+  }
+  #box,#h,#p{
+    margin-bottom: 40px;
+  }
+  #box,.a{
+     margin-bottom: 40px;
+  }
+}
+</style>
+<style>
+.custom-alert {
+    background: #d6f5d6;
+    color: #006600;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 5px solid #2db92d;
+    font-size: 16px;
+}
+.custom-alert span {
+    font-weight: bold;
+}
+.custom-alert button {
+    background: #006600;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+</style>
+
 </head>
 
 <body>
@@ -81,24 +220,24 @@ include('window1.php');
 <?php
 include('header.php');
 ?>
-
+    <div>
         <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel"> 
             <div class="carousel-inner"> 
                 <div class="carousel-item active">
-                    <img class="w-100" style="height:800px;" src="img/Voip.png" alt="Image">
+                    <img class="w-100" style="height:800px;" src="img/Voip.webp" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                        <div class="p-3" style="max-width: 900px;">
-                            <h5 class="text-white text-uppercase mb-3 animated slideInDown">VOICE OVER INTERNET PROTOCOL</h5>
-                            <h1 class="display-1 text-white mb-md-4 animated zoomIn" style="font-size:70px; width: 900px;">Empowering Your Business with Smarter Calling</h1>
-                            <a href="quote.php" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free Quote</a>
-                            <a href="contact.php" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Contact Us</a>
+                        <div class="p-3" style="max-width: 900px; margin-top: 100px;" id="box">
+                            <p id="p" class="text-white text-uppercase mb-3 animated slideInDown">VOICE OVER INTERNET PROTOCOL</p>
+                            <h1 id="h" class="display-1 text-white mb-md-4 animated zoomIn" >Empowering Your Business with Smarter Calling</h1>
+                            <a href="quote.php" class="a btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free Quote</a>
+                            <a href="contact.php" class="a btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Contact Us</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="w-100" style="height:800px;" src="img/bpo.png" alt="Image">
+                    <img class="w-100" style="height:800px;" src="img/bpo.webp" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                        <div class="p-3" style="max-width: 900px;">
+                        <div class="p-3" style="max-width: 900px; margin-top: 10px;">
                             <h5 class="text-white text-uppercase mb-3 animated slideInDown">BUISNESS PROCESS OUTSOURCING</h5>
                             <h1 class="display-1 text-white mb-md-4 animated zoomIn">Smart Outsourcing for Smarter Businesses.</h1>
                             <a href="quote.php" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Free Quote</a>
@@ -107,7 +246,7 @@ include('header.php');
                     </div>
                 </div>
                 <div class="carousel-item" >
-                    <img class="w-100" style="height:800px;" src="img/ivr.JPG" alt="Image">
+                    <img class="w-100" style="height:800px;" src="img/ivr.webp" alt="Image">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                         <div class="p-3" style="max-width: 900px;"  >
                             <h5 class="text-white text-uppercase mb-3 animated slideInDown ">INTERACTIVE VOICE RESPONSE</h5>
@@ -163,7 +302,7 @@ include('header.php');
                         </div>
                         <div class="ps-4">
                             <h5 class="text-white mb-0">Happy Clients</h5>
-                            <h1 class="text-white mb-0" data-toggle="counter-up">38474</h1>
+                            <h1 class="text-white mb-0" data-toggle="counter-up">9950</h1>
                         </div>
                     </div>
                 </div>
@@ -185,7 +324,7 @@ include('header.php');
                         </div>
                         <div class="ps-4">
                             <h5 class="text-white mb-0">Win Awards</h5>
-                            <h1 class="text-white mb-0" data-toggle="counter-up">72673</h1>
+                            <h1 class="text-white mb-0" data-toggle="counter-up">600</h1>
                         </div>
                     </div>
                 </div>
@@ -228,7 +367,7 @@ include('header.php');
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="img/about1.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="img/about1.webp" style="object-fit: cover;">
                     </div>
                 </div>
             </div>
@@ -265,7 +404,7 @@ include('header.php');
                 </div>
                 <div class="col-lg-4  wow zoomIn" data-wow-delay="0.9s" style="min-height: 350px;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.1s" src="img/whychoose.jpg" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.1s" src="img/whychoose.webp" style="object-fit: cover;">
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -303,34 +442,10 @@ include('header.php');
                 <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
                     <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon">
-                            <i class="fa fa-shield-alt text-white"></i>
+                            <i class="fab fa-android text-white"></i>
                         </div>
-                        <h4 class="mb-3">System Administrator</h4>
-                        <p class="m-0">Our team of skilled administrators manages your servers, networks, and IT infrastructure so your business can focus on growth without worrying about downtime or security risks.</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
-                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                        <div class="service-icon">
-                            <i class="fa fa-chart-pie text-white"></i>
-                        </div>
-                        <h4 class="mb-3">Digital Marketing</h4>
-                        <p class="m-0">. We design strategies that help you attract, engage, and convert your target audience effectively.</p>
-                        <a class="btn btn-lg btn-primary rounded" href="">
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.9s">
-                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-                        <div class="service-icon">
-                            <i class="fa fa-code text-white"></i>
-                        </div>
-                        <h4 class="mb-3">Web Development</h4>
-                        <p class="m-0">At QALB TECH, we specialize in creating modern, responsive, and user-friendly websites that look great on any device and drive real results.</p>
+                        <h4 class="mb-3">VOIP Solution</h4>
+                        <p class="m-0">Say goodbye to costly traditional phone systems and embrace crystal-clear, reliable, and scalable communication over the internet.</p>
                         <a class="btn btn-lg btn-primary rounded" href="">
                             <i class="bi bi-arrow-right"></i>
                         </a>
@@ -341,8 +456,8 @@ include('header.php');
                         <div class="service-icon">
                             <i class="fab fa-android text-white"></i>
                         </div>
-                        <h4 class="mb-3">VOIP Solution</h4>
-                        <p class="m-0">Say goodbye to costly traditional phone systems and embrace crystal-clear, reliable, and scalable communication over the internet.</p>
+                        <h4 class="mb-3">IVR Solution</h4>
+                        <p class="m-0">Automate call routing, provide 24/7 support, and ensure every customer connects to the right department — saving time and improving satisfaction.</p>
                         <a class="btn btn-lg btn-primary rounded" href="">
                             <i class="bi bi-arrow-right"></i>
                         </a>
@@ -355,6 +470,30 @@ include('header.php');
                         </div>
                         <h4 class="mb-3">Toll Free Number</h4>
                         <p class="m-0">Make it easy for your customers to connect with your business—anytime, anywhere—with our reliable toll-free number solutions.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.3s">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                            <i class="fa fa-shield-alt text-white"></i>
+                        </div>
+                        <h4 class="mb-3">SIP-Trunking</h4>
+                        <p class="m-0">Connect your PBX directly to the cloud and enjoy high-quality, cost-efficient voice calling with guaranteed uptime, security, and flexibility for all your communication needs.</p>
+                        <a class="btn btn-lg btn-primary rounded" href="">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow zoomIn" data-wow-delay="0.6s">
+                    <div class="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="service-icon">
+                            <i class="fa fa-chart-pie text-white"></i>
+                        </div>
+                        <h4 class="mb-3">BPO & Outsourcing</h4>
+                        <p class="m-0">We design strategies that help you attract, engage, and convert your target audience effectively.</p>
                         <a class="btn btn-lg btn-primary rounded" href="">
                             <i class="bi bi-arrow-right"></i>
                         </a>
@@ -485,14 +624,14 @@ include('header.php');
                                 <div class="col-12">
                                     <input type="email" class="form-control bg-light border-0" placeholder="Your Email" name="email" style="height: 55px;" require>
                                 </div>
-                                <div class="col-12">
+                                <!-- <div class="col-12">
                                     <select class="form-select bg-light border-0" style="height: 55px;" name="service" require>
                                         <option selected>Select A Service</option>
                                         <option value="1">Service 1</option>
                                         <option value="2">Service 2</option>
                                         <option value="3">Service 3</option>
                                     </select>
-                                </div>
+                                </div> -->
                                 <div class="col-12">
                                     <textarea class="form-control bg-light border-0" name="message" rows="3" placeholder="Message" require></textarea>
                                 </div>
@@ -519,7 +658,7 @@ include('header.php');
             <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded" src="img/testimonial-1.jpg" style="width: 60px; height: 60px;" >
+                        <img class="img-fluid rounded" src="img/testimonial-1.webp" style="width: 60px; height: 60px;" >
                         <div class="ps-4">
                             <h4 class="text-primary mb-1">Client Name</h4>
                             <small class="text-uppercase">Profession</small>
@@ -531,7 +670,7 @@ include('header.php');
                 </div>
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded" src="img/testimonial-2.jpg" style="width: 60px; height: 60px;" >
+                        <img class="img-fluid rounded" src="img/testimonial-2.webp" style="width: 60px; height: 60px;" >
                         <div class="ps-4">
                             <h4 class="text-primary mb-1">Client Name</h4>
                             <small class="text-uppercase">Profession</small>
@@ -543,7 +682,7 @@ include('header.php');
                 </div>
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded" src="img/testimonial-3.jpg" style="width: 60px; height: 60px;" >
+                        <img class="img-fluid rounded" src="img/testimonial-3.webp" style="width: 60px; height: 60px;" >
                         <div class="ps-4">
                             <h4 class="text-primary mb-1">Client Name</h4>
                             <small class="text-uppercase">Profession</small>
@@ -555,7 +694,7 @@ include('header.php');
                 </div>
                 <div class="testimonial-item bg-light my-4">
                     <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                        <img class="img-fluid rounded" src="img/testimonial-4.jpg" style="width: 60px; height: 60px;" >
+                        <img class="img-fluid rounded" src="img/testimonial-4.webp" style="width: 60px; height: 60px;" >
                         <div class="ps-4">
                             <h4 class="text-primary mb-1">Client Name</h4>
                             <small class="text-uppercase">Profession</small>
@@ -582,7 +721,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                     <div class="team-item bg-light rounded overflow-hidden">
                         <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="img/team-1.jpg" alt="">
+                            <img class="img-fluid w-100" src="img/team-1.webp" alt="">
                             <div class="team-social">
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
@@ -599,7 +738,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
                     <div class="team-item bg-light rounded overflow-hidden">
                         <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="img/team-2.jpg" alt="">
+                            <img class="img-fluid w-100" src="img/team-2.webp" alt="">
                             <div class="team-social">
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
@@ -616,7 +755,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.9s">
                     <div class="team-item bg-light rounded overflow-hidden">
                         <div class="team-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="img/team-3.jpg" alt="">
+                            <img class="img-fluid w-100" src="img/team-3.webp" alt="">
                             <div class="team-social">
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-twitter fw-normal"></i></a>
                                 <a class="btn btn-lg btn-primary btn-lg-square rounded" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
@@ -647,7 +786,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                     <div class="blog-item bg-light rounded overflow-hidden">
                         <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-1.jpg" alt="">
+                            <img class="img-fluid" src="img/blog-1.webp" alt="">
                             <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
                         </div>
                         <div class="p-4">
@@ -664,7 +803,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
                     <div class="blog-item bg-light rounded overflow-hidden">
                         <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-2.jpg" alt="">
+                            <img class="img-fluid" src="img/blog-2.webp" alt="">
                             <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
                         </div>
                         <div class="p-4">
@@ -681,7 +820,7 @@ include('header.php');
                 <div class="col-lg-4 wow slideInUp" data-wow-delay="0.9s">
                     <div class="blog-item bg-light rounded overflow-hidden">
                         <div class="blog-img position-relative overflow-hidden">
-                            <img class="img-fluid" src="img/blog-3.jpg" alt="">
+                            <img class="img-fluid" src="img/blog-3.webp" alt="">
                             <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Web Design</a>
                         </div>
                         <div class="p-4">
@@ -702,23 +841,23 @@ include('header.php');
 
 
     <!-- Vendor Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5 mb-5">
             <div class="bg-white">
                 <div class="owl-carousel vendor-carousel">
-                    <img src="img/vendor-1.jpg" alt="">
-                    <img src="img/vendor-2.jpg" alt="">
-                    <img src="img/vendor-3.jpg" alt="">
-                    <img src="img/vendor-4.jpg" alt="">
-                    <img src="img/vendor-5.jpg" alt="">
-                    <img src="img/vendor-6.jpg" alt="">
-                    <img src="img/vendor-7.jpg" alt="">
-                    <img src="img/vendor-8.jpg" alt="">
-                    <img src="img/vendor-9.jpg" alt="">
+                    <img src="img/vendor-1.webp" alt="">
+                    <img src="img/vendor-2.webp" alt="">
+                    <img src="img/vendor-3.webp" alt="">
+                    <img src="img/vendor-4.webp" alt="">
+                    <img src="img/vendor-5.webp" alt="">
+                    <img src="img/vendor-6.webp" alt="">
+                    <img src="img/vendor-7.webp" alt="">
+                    <img src="img/vendor-8.webp" alt="">
+                    <img src="img/vendor-9.webp" alt="">
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Vendor End -->
     <?php
     include('footer.php');
@@ -741,6 +880,7 @@ include('header.php');
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
 </body>
 
 </html>

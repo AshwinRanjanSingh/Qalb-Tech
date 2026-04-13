@@ -1,0 +1,189 @@
+<!--
+Blue-White Country Selector
+Single-file HTML/CSS/JS. Open this file in your browser.
+Features:
+- Blue & white high-contrast theme
+- Search bar (live filter)
+- Region tabs (Popular, Asia, Europe, Americas, Africa, Oceania)
+- Country cards showing flag + country name
+- No area codes
+- "View More Countries" button to expand the list
+
+Flags are loaded from flagcdn.com using each country's ISO2 code.
+You can edit the `countries` array in the JS to add/remove countries.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Country Selector — Blue & White</title>
+  <style>
+    :root{
+      --blue-900:#062a78;
+      --blue-700:#0b4ad1;
+      --blue-500:#2b6ef6;
+      --white:#ffffff;
+      --muted:#e8f0ff;
+      --card-radius:12px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--blue-900),#0b2a66);color:var(--white)}
+    .container{max-width:1150px;margin:36px auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    h1{margin:0;font-size:20px;font-weight:600}
+
+    .search-wrap{display:flex;align-items:center;gap:12px}
+    .search{background:var(--white);border-radius:999px;padding:10px 14px;width:340px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(11,74,209,0.12)}
+    .search input{border:0;outline:0;background:transparent;font-size:14px;color:#062a78;width:100%}
+    .search svg{width:18px;height:18px;opacity:0.9}
+
+    /* tabs */
+    .tabs{display:flex;gap:10px;margin:22px 0}
+    .tab{background:transparent;border:1px solid rgba(255,255,255,0.12);padding:8px 12px;border-radius:10px;color:var(--white);cursor:pointer;font-size:13px}
+    .tab.active{background:var(--white);color:var(--blue-900);border-color:transparent;box-shadow:0 6px 20px rgba(0,0,0,0.28)}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:8px}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.grid{grid-template-columns:1fr}}
+
+    .card{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);padding:12px 14px;border-radius:var(--card-radius);cursor:pointer;transition:transform .12s ease,background .12s}
+    .card:hover{transform:translateY(-4px);background:var(--white);color:var(--blue-900)}
+    .flag{width:36px;height:24px;border-radius:6px;overflow:hidden;flex:0 0 36px;background:#fff}
+    .country-name{font-size:15px;font-weight:600}
+
+    .view-more{display:block;margin:18px auto;padding:10px 18px;border-radius:10px;border:2px solid var(--white);background:transparent;color:var(--white);cursor:pointer}
+
+    .empty{padding:26px;border-radius:12px;background:rgba(255,255,255,0.04);text-align:center;color:rgba(255,255,255,0.8)}
+
+    footer{margin-top:26px;color:rgba(255,255,255,0.7);font-size:13px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Countries</h1>
+        <div style="color:rgba(255,255,255,0.8);font-size:13px;margin-top:6px;">Select a country — flags and names shown</div>
+      </div>
+
+      <div class="search-wrap">
+        <div class="search" role="search" aria-label="Search countries">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 19a8 8 0 1 1 5.293-14.293A8 8 0 0 1 11 19z" stroke="#062a78" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="searchInput" placeholder="Search countries..." aria-label="Search countries" />
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Regions">
+      <button class="tab active" data-region="all">Popular</button>
+      <button class="tab" data-region="Asia">Asia</button>
+      <button class="tab" data-region="Europe">Europe</button>
+      <button class="tab" data-region="Americas">Americas</button>
+      <button class="tab" data-region="Africa">Africa</button>
+      <button class="tab" data-region="Oceania">Oceania</button>
+    </nav>
+
+    <main>
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <div id="empty" class="empty" style="display:none">No countries match your search.</div>
+      <button id="viewMore" class="view-more">View More Countries</button>
+    </main>
+
+    <footer>Tip: Click a country card to select it.</footer>
+  </div>
+
+  <script>
+    // Minimal country dataset. Use ISO2 for flagcdn (lowercase).
+    const countries = [
+      {name:'United States',iso:'us',region:'Americas'},
+      {name:'Canada',iso:'ca',region:'Americas'},
+      {name:'United Kingdom',iso:'gb',region:'Europe'},
+      {name:'Australia',iso:'au',region:'Oceania'},
+      {name:'Germany',iso:'de',region:'Europe'},
+      {name:'France',iso:'fr',region:'Europe'},
+      {name:'Japan',iso:'jp',region:'Asia'},
+      {name:'China',iso:'cn',region:'Asia'},
+      {name:'India',iso:'in',region:'Asia'},
+      {name:'Brazil',iso:'br',region:'Americas'},
+      // extra countries shown only after "View More"
+      {name:'South Africa',iso:'za',region:'Africa',extra:true},
+      {name:'Mexico',iso:'mx',region:'Americas',extra:true},
+      {name:'Italy',iso:'it',region:'Europe',extra:true},
+      {name:'Spain',iso:'es',region:'Europe',extra:true},
+      {name:'Netherlands',iso:'nl',region:'Europe',extra:true},
+      {name:'Saudi Arabia',iso:'sa',region:'Asia',extra:true}
+    ];
+
+    const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('searchInput');
+    const tabs = document.querySelectorAll('.tab');
+    const empty = document.getElementById('empty');
+    const viewMoreBtn = document.getElementById('viewMore');
+
+    let activeRegion = 'all';
+    let showExtra = false;
+
+    function flagUrl(iso){
+      // flagcdn small PNG; fallback to emoji if needed
+      return `https://flagcdn.com/w40/${iso}.png`;
+    }
+
+    function render(){
+      const q = searchInput.value.trim().toLowerCase();
+      grid.innerHTML='';
+      const list = countries.filter(c=>{
+        if(!showExtra && c.extra) return false;
+        if(activeRegion!=='all' && c.region!==activeRegion) return false;
+        if(q && !c.name.toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      if(list.length===0){empty.style.display='block'} else {empty.style.display='none'}
+
+      list.forEach(c=>{
+        const card = document.createElement('button');
+        card.className='card';
+        card.type='button';
+        card.title = c.name;
+        card.innerHTML = `
+          <div class="flag"><img alt="${c.name} flag" src="${flagUrl(c.iso)}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'"/></div>
+          <div class="country-name">${c.name}</div>
+        `;
+        card.addEventListener('click',()=>{
+          // Selected action — you can replace with your own behavior
+          alert('Selected: ' + c.name);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    // Tab behavior
+    tabs.forEach(t=>{
+      t.addEventListener('click',()=>{
+        tabs.forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        activeRegion = t.dataset.region;
+        render();
+      });
+    });
+
+    // Search
+    searchInput.addEventListener('input', ()=>{
+      render();
+    });
+
+    // View more toggles extra countries
+    viewMoreBtn.addEventListener('click',()=>{
+      showExtra = !showExtra;
+      viewMoreBtn.textContent = showExtra? 'View Fewer Countries' : 'View More Countries';
+      render();
+    });
+
+    // initial render
+    render();
+  </script>
+</body>
+</html>

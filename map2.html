@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Global Area Coverage - QALB TECH</title>
+
+<style>
+  :root{
+    --primary:#0d6efd;
+    --bg:#f5f9fc;
+    --card-bg:#ffffff;
+    --muted:#6c757d;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, Arial; background:var(--bg); color:#111;}
+  .wrap{
+    max-width:1200px;
+    margin:28px auto;
+    padding:20px;
+  }
+
+  /* Border container like your image */
+  .coverage-container{
+    display:flex;
+    gap:18px;
+    background:linear-gradient(180deg,#ffffff,#fcfdff);
+    border-radius:12px;
+    border:1px solid #e3f0f8;
+    box-shadow:0 18px 40px rgba(9,30,62,0.06);
+    overflow:hidden;
+  }
+
+  /* Left: big map area (65%) */
+  .map-area{
+    width:65%;
+    min-width:520px; /* ensures horizontal scroll on smaller screens */
+    height:560px;
+    position:relative;
+  }
+
+  /* Right: country panel (35%) */
+  .info-panel{
+    width:35%;
+    min-width:340px;
+    height:560px;
+    padding:18px;
+    box-sizing:border-box;
+    background:var(--card-bg);
+    overflow:auto;
+  }
+
+  /* Top controls overlay on map */
+  .map-controls{
+    position:absolute;
+    top:12px;
+    right:12px;
+    z-index:99;
+    display:flex;
+    gap:8px;
+  }
+  .map-controls button{
+    background:#fff;
+    border:1px solid #e6eef8;
+    padding:8px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 6px 18px rgba(13,110,253,0.06);
+  }
+
+  /* map container fills */
+  #globalMap{width:100%;height:100%;display:block;}
+
+  /* Info panel styles */
+  .info-header{display:flex;gap:10px;align-items:center;margin-bottom:10px;}
+  .flag{font-size:28px;}
+  .country-name{font-size:20px;font-weight:700;color:var(--primary);}
+  .service-title{font-size:15px;margin-top:8px;color:#222;font-weight:600;}
+  .summary{color:var(--muted);margin-top:10px;line-height:1.45;}
+
+  .small-map{
+    width:100%;
+    height:160px;
+    border-radius:8px;
+    margin:12px 0;
+    border:1px solid #eef5fb;
+    overflow:hidden;
+  }
+
+  .locations-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .loc-item{background:#fff;padding:8px 10px;border-radius:18px;border:1px solid #f0f4fa;font-size:13px;color:#333;box-shadow:0 6px 14px rgba(13,110,253,0.04);}
+  .status-badge{display:inline-block;padding:6px 10px;border-radius:14px;background:#e8faf8;border:1px solid #dff3ee;color:#0b7a66;margin-top:10px;font-weight:600;}
+
+  /* Responsive: allow horizontal scroll on container when space insufficient */
+  .wrap{overflow-x:auto;padding-bottom:10px;}
+  @media (max-width:980px){
+    .coverage-container{flex-direction:column;}
+    .map-area,.info-panel{width:100%;min-width:unset;height:420px;}
+    .map-area{min-height:420px;}
+    .info-panel{height:auto;max-height:420px;}
+  }
+
+  /* small helper */
+  .muted{color:var(--muted);font-size:13px;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h2 style="margin:0 0 10px;">Where Our Tech Powers Global Success</h2>
+  <p class="muted">Discover QALB TECH's global reach. Click a pin or select a country to view service details and local coverage.</p>
+
+  <div class="coverage-container" id="coverageBox">
+    <div class="map-area">
+      <div class="map-controls">
+        <button id="toggleMapType">Satellite</button>
+        <button id="panToNext">Pan →</button>
+        <button id="fullscreenBtn">Fullscreen</button>
+      </div>
+      <div id="globalMap"></div>
+    </div>
+
+    <div class="info-panel" id="infoPanel">
+      <div class="info-header">
+        <div class="flag" id="countryFlag">🌐</div>
+        <div>
+          <div class="country-name" id="countryName">Select a country</div>
+          <div class="muted" id="countryShort">Service summary will appear here</div>
+        </div>
+      </div>
+
+      <div class="service-title" id="serviceTitle">—</div>
+      <div class="summary" id="serviceSummary">Click any red point on the map to open detailed info and local coverage list. By default this panel is ready for your selection.</div>
+
+      <div class="small-map" id="localMapPlaceholder">
+        <!-- small country-local map will be injected here -->
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8899aa;">Local area map will appear here</div>
+      </div>
+
+      <div style="margin-top:8px;font-weight:600;">Service locations</div>
+      <div class="locations-list" id="serviceAreas">
+        <!-- local city chips -->
+      </div>
+
+      <div style="margin-top:12px;">
+        <div class="status-badge" id="statusBadge">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Load Google Maps JS - REPLACE the placeholder text with your key -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script> -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap&libraries=places"></script>
+
+<script>
+/* ---------- Data: countries & sub-locations --------- */
+const countries = [
+  { id:'india', name:'India', flag:'🇮🇳', lat:20.5937, lng:78.9629,
+    service:'VoIP & IVR Solutions', summary:'High-quality VoIP, IVR systems and local DID numbers for enterprise customers.',
+    areas:['New Delhi','Mumbai','Bengaluru','Chennai']
+  },
+  { id:'usa', name:'United States', flag:'🇺🇸', lat:37.0902, lng:-95.7129,
+    service:'SIP Trunking & BPO Services', summary:'Scalable SIP trunking, DID provisioning and BPO operations across multiple states.',
+    areas:['New York','Los Angeles','Dallas','Chicago']
+  },
+  { id:'germany', name:'Germany', flag:'🇩🇪', lat:51.1657, lng:10.4515,
+    service:'IoT Fleet Management', summary:'Real-time IoT fleet solutions, telematics and predictive maintenance services.',
+    areas:['Berlin','Munich','Frankfurt','Hamburg']
+  },
+  { id:'uae', name:'United Arab Emirates', flag:'🇦🇪', lat:23.4241, lng:53.8478,
+    service:'Toll-Free & CRM Integration', summary:'Toll-free services and enterprise CRM integration across the MENA region.',
+    areas:['Dubai','Abu Dhabi','Sharjah']
+  },
+  { id:'singapore', name:'Singapore', flag:'🇸🇬', lat:1.3521, lng:103.8198,
+    service:'Unified Contact Center', summary:'Cloud contact center, omnichannel routing and workforce management.',
+    areas:['Singapore']
+  }
+];
+
+/* ---------- Globals ---------- */
+let map, localMap;
+let markers = [];
+let currentMapType = 'roadmap';
+let selectedCountryIndex = null;
+
+/* ---------- Initialize global map ---------- */
+function initMap(){
+  const center = { lat:20, lng:0 };
+  map = new google.maps.Map(document.getElementById('globalMap'), {
+    center,
+    zoom:2,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl:false,
+    fullscreenControl:false,
+    gestureHandling:'greedy',
+    styles: [] // keep default realistic tiles; you can add style for contrast
+  });
+
+  // Add markers with labels (labels always visible)
+  countries.forEach((c, idx) => {
+    const marker = new google.maps.Marker({
+      position: {lat:c.lat, lng:c.lng},
+      map,
+      title: c.name,
+      label: {
+        text: c.name,
+        color: '#ffffff',
+        fontWeight: '600',
+        fontSize: '12px',
+        className: 'map-label'
+      },
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        fillColor: '#ff4b4b',
+        fillOpacity: 1,
+        strokeWeight:2,
+        strokeColor:'#ffffff'
+      },
+      optimized: false,
+      zIndex: 999 + idx
+    });
+
+    marker._countryIndex = idx; // attach index for lookup
+
+    // click opens info panel & pans map smoothly
+    marker.addListener('click', () => {
+      selectCountry(marker._countryIndex, true);
+    });
+
+    markers.push(marker);
+  });
+
+  // Make labels more readable: we will create a small label overlay using InfoWindow pinned (no close btn)
+  markers.forEach(mk => {
+    const labelDiv = document.createElement('div');
+    labelDiv.style.padding = '6px 8px';
+    labelDiv.style.background = 'rgba(0,0,0,0.65)';
+    labelDiv.style.color = '#fff';
+    labelDiv.style.fontWeight = '600';
+    labelDiv.style.borderRadius = '14px';
+    labelDiv.style.fontSize = '12px';
+    labelDiv.style.whiteSpace = 'nowrap';
+    labelDiv.style.transform = 'translateY(-36px)';
+    labelDiv.innerText = mk.getTitle();
+    // InfoWindow with no close box
+    const iw = new google.maps.InfoWindow({
+      content: labelDiv,
+      disableAutoPan: true,
+      pixelOffset: new google.maps.Size(0,-10)
+    });
+    // open permanently
+    iw.open(map, mk);
+  });
+
+  // initial selection (optional: focus first country)
+  // selectCountry(0,false);
+}
+
+/* ---------- Select country: update right panel and small map ---------- */
+function selectCountry(index, shouldPan=true){
+  if(index === null || index === undefined) return;
+  selectedCountryIndex = index;
+  const data = countries[index];
+
+  // update panel text
+  document.getElementById('countryFlag').textContent = data.flag;
+  document.getElementById('countryName').textContent = data.name;
+  document.getElementById('countryShort').textContent = data.service;
+  document.getElementById('serviceTitle').textContent = data.service;
+  document.getElementById('serviceSummary').textContent = data.summary;
+  document.getElementById('statusBadge').textContent = 'Active — ' + data.name;
+
+  // local areas chips
+  const areasWrap = document.getElementById('serviceAreas');
+  areasWrap.innerHTML = '';
+  data.areas.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'loc-item';
+    d.innerText = a;
+    areasWrap.appendChild(d);
+  });
+
+  // pan map to country with smooth animation
+  if(shouldPan){
+    map.panTo({lat:data.lat, lng:data.lng});
+    map.setZoom(5);
+  }
+
+  // create small local map inside right panel (if exists re-init)
+  createLocalMap(data);
+}
+
+/* ---------- create small local map (uses same Google Maps API) ---------- */
+function createLocalMap(data){
+  const container = document.getElementById('localMapPlaceholder');
+  container.innerHTML = ''; // clear
+  const mapDiv = document.createElement('div');
+  mapDiv.style.width = '100%';
+  mapDiv.style.height = '100%';
+  container.appendChild(mapDiv);
+
+  // center slightly off to show multiple cities
+  localMap = new google.maps.Map(mapDiv, {
+    center: {lat:data.lat, lng:data.lng},
+    zoom: 5,
+    disableDefaultUI:true,
+    gestureHandling:'none'
+  });
+
+  // add small markers for each area (use geocoding fallback: approximate offset if no precise coords)
+  // For demo, we create offset positions around the center — replace with real lat/lng if available.
+  const baseLat = data.lat, baseLng = data.lng;
+  const offsets = [
+    [0.6, 0.8], [-0.7, -0.6], [0.9, -0.9], [-0.9, 0.6]
+  ];
+
+  data.areas.forEach((area, i) => {
+    const off = offsets[i % offsets.length];
+    const m = new google.maps.Marker({
+      position: {lat: baseLat + (off[0]*0.7), lng: baseLng + (off[1]*0.7)},
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale:6,
+        fillColor:'#ff4b4b',
+        fillOpacity:1,
+        strokeColor:'#fff',
+        strokeWeight:1.5
+      },
+      map: localMap,
+      title: area
+    });
+    // label next to marker via InfoWindow
+    const lbl = new google.maps.InfoWindow({
+      content: '<div style="font-weight:600;font-size:12px;">' + area + '</div>',
+      disableAutoPan:true,
+      pixelOffset: new google.maps.Size(10,0)
+    });
+    lbl.open(localMap, m);
+  });
+}
+
+/* ---------- UI Controls ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  // load map after DOM ready
+  if (typeof google === 'object' && typeof google.maps === 'object') {
+    initMap();
+  } else {
+    console.error('Google Maps not loaded. Make sure you replaced the API key.');
+  }
+
+  document.getElementById('toggleMapType').addEventListener('click', () => {
+    if(!map) return;
+    currentMapType = (currentMapType === 'roadmap') ? 'satellite' : 'roadmap';
+    map.setMapTypeId(currentMapType === 'satellite' ? google.maps.MapTypeId.SATELLITE : google.maps.MapTypeId.ROADMAP);
+    document.getElementById('toggleMapType').innerText = currentMapType === 'satellite' ? 'Roadmap' : 'Satellite';
+  });
+
+  // pan to next country in array (simple carousel pan)
+  document.getElementById('panToNext').addEventListener('click', () => {
+    let idx = selectedCountryIndex === null ? 0 : (selectedCountryIndex + 1) % countries.length;
+    selectCountry(idx, true);
+  });
+
+  // fullscreen the coverage box
+  document.getElementById('fullscreenBtn').addEventListener('click', async () => {
+    const el = document.getElementById('coverageBox');
+    if(!document.fullscreenElement){
+      await el.requestFullscreen();
+      // when fullscreen, resize map to fit
+      setTimeout(()=>{ google.maps.event.trigger(map, 'resize'); }, 500);
+    } else {
+      await document.exitFullscreen();
+      setTimeout(()=>{ google.maps.event.trigger(map, 'resize'); }, 500);
+    }
+  });
+
+  // OPTIONAL: initially select Germany (like your example)
+  setTimeout(()=> selectCountry(2, true), 700);
+});
+
+/* ---------- Helpful: addAbility to add country programmatically ---------- */
+/* Example:
+countries.push({id:'brazil', name:'Brazil', flag:'🇧🇷', lat:-14.2350, lng:-51.9253, service:'SIP', summary:'..', areas:['Sao Paulo','Rio']});
+then create marker: createMarkers() ... For brevity, code uses initial dataset only.
+*/
+
+</script>
+</body>
+</html>

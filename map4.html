@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Impact Map - Final Fixed</title>
+<style>
+/* --- 🔴 CRITICAL FIXES FOR SCROLLING AND HEIGHT (Using Flexbox for 100vh) --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #e0f7fa; /* Match section background */
+}
+
+/* 1. Main Page Container: Full Viewport, No Main Scroll */
+.global-impact-section {
+    height: 100vh;
+    display: flex; /* CRITICAL: Use flexbox for vertical stacking */
+    flex-direction: column;
+    overflow: hidden; /* Prevent body scroll */
+    padding: 0; /* Remove padding from here */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: sectionFadeUp 1s ease-out forwards;
+    animation-delay: 0.2s;
+}
+
+/* 2. Header/Title Content Area (Fixed/Shrink Height) */
+.header-content-area {
+    padding: 30px 20px 20px 20px; /* Padding only here */
+    text-align: center;
+    flex-shrink: 0; /* Ensures header does not shrink */
+    background-color: var(--light-blue);
+}
+
+/* 3. Interactive Map Container (Takes all remaining height) */
+.map-interactive-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 20px 30px 20px; /* Padding for the sides and bottom */
+    
+    flex-grow: 1; /* CRITICAL: Takes all available remaining vertical space */
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    
+    /* Ensure the content inside can be handled */
+    min-height: 0; /* Fix for flex item height issue */
+}
+
+
+/* --- 🎨 CSS: Global Variables and Styling --- */
+:root {
+    --primary-blue: #007bff;
+    --active-gold: #ffc107;
+    --light-blue: #e0f7fa;
+    --dark-text: #2c3e50;
+    --white: #ffffff;
+    --shadow-medium: rgba(0, 0, 0, 0.2);
+}
+
+@keyframes sectionFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+.impact-title { font-size: 3em; color: var(--dark-text); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 15px; font-weight: 700; }
+.icon-globe { font-size: 0.9em; display: inline-block; animation: iconRotate 15s infinite linear; }
+@keyframes iconRotate { to { transform: rotate(360deg); } }
+.impact-subtitle { font-size: 1.3em; color: #555; max-width: 900px; margin: 0 auto 0 auto; font-weight: 300; }
+
+/* --- World Map SVG Placeholder (65% Width) --- */
+.world-map-svg-placeholder {
+    width: 65%;
+    /* CRITICAL FIX 4: Height 100% relative to the flexible parent */
+    height: 100%; 
+    position: relative; 
+    border-radius: 15px;
+    overflow: hidden; 
+    background-color: var(--white);
+    box-shadow: 0 15px 40px var(--shadow-medium);
+    border: 1px solid #D8F0F7; 
+    opacity: 0;
+    transform: perspective(1000px) rotateX(10deg) scale(0.95);
+    animation: mapReveal 1.2s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes mapReveal { to { opacity: 1; transform: perspective(1000px) rotateX(0deg) scale(1); } }
+
+/* CRITICAL FIX 5: Ensure SVG container fills the placeholder */
+.world-map-svg-container { 
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    padding: 20px; 
+    box-sizing: border-box;
+    z-index: 1; 
+}
+
+/* CRITICAL FIX 6: Ensure SVG element fills its container */
+.interactive-map-svg { 
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+    margin: 0; 
+    background-color: transparent; 
+}
+
+/* --- Animated Map Pins --- */
+.map-pin {
+    position: absolute; width: 20px; height: 20px; background-color: var(--primary-blue); 
+    border-radius: 50%; cursor: pointer; box-shadow: 0 0 0 0 var(--primary-blue);
+    animation: pinPulse 2s infinite ease-out; border: 2px solid var(--white);
+    z-index: 10; transition: all 0.2s ease;
+}
+.map-pin.active {
+    background-color: var(--active-gold); transform: scale(1.2); 
+    box-shadow: 0 0 0 0 var(--active-gold); animation: activePinPulse 1.5s infinite ease-out; 
+}
+
+@keyframes pinPulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); transform: scale(1); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); transform: scale(1.05); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); transform: scale(1); }
+}
+@keyframes activePinPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.6); transform: scale(1.2); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); transform: scale(1.3); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); transform: scale(1.2); }
+}
+
+/* --- Project Info Card (35% Width, Full Height, Internal Scroll) --- */
+.project-info-card {
+    position: relative; width: 35%; 
+    /* CRITICAL FIX 7: Height 100% relative to the flexible parent */
+    height: 100%; 
+    background-color: var(--white); border-radius: 12px; box-shadow: 0 10px 30px var(--shadow-medium);
+    padding: 25px; text-align: left; 
+    overflow-y: auto; /* Internal scrolling only for card content */
+    
+    opacity: 0; visibility: hidden; transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+    z-index: 20;
+}
+.project-info-card.active { transform: translateX(0); opacity: 1; visibility: visible; }
+
+/* Detail Map Section Styles (Kept same) */
+.country-map-detail { margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef; }
+.country-map-detail h4 { margin-top: 0; font-size: 1.1em; color: var(--dark-text); display: flex; align-items: center; gap: 5px; font-weight: 600; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; }
+.sub-map-placeholder { min-height: 120px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; border: 1px dashed #ced4da; border-radius: 5px; padding: 15px; background-color: var(--white); color: #6c757d; font-size: 0.9em; }
+.service-dot { display: flex; align-items: center; font-weight: 500; }
+.service-dot-icon { display: inline-block; width: 10px; height: 10px; background-color: #dc3545; border-radius: 50%; margin-right: 5px; box-shadow: 0 0 5px rgba(220, 53, 69, 0.8); }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .global-impact-section { height: auto; overflow-y: visible; }
+    .map-interactive-container { height: auto; flex-direction: column; }
+    .world-map-svg-placeholder { width: 100%; min-height: 400px; }
+    .project-info-card { width: 100%; min-height: 300px; transform: none; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
+    .project-info-card.active { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<section class="global-impact-section">
+    
+    <div class="header-content-area">
+        <h2 class="impact-title">
+            <span class="icon-globe">🌐</span> Where Our Tech Powers Global Success
+        </h2>
+        <p class="impact-subtitle">
+            Discover the reach of our innovative tech services. Click on a country to see our impact!
+        </p>
+    </div>
+
+    <div class="map-interactive-container">
+        
+        <div class="world-map-svg-placeholder">
+            <div class="world-map-svg-container">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                    viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" class="interactive-map-svg">
+                    
+                    <defs>
+                        <style type="text/css">.land {fill: #A9D5F4; stroke: #fff; stroke-width: 0.5px;}</style>
+                    </defs>
+
+                    <path class="land" d="M308.28,103.41c1.54,0.13,3.09,0.25,4.64,0.38l-4.64-0.38ZM284.14,105.15c-1.63-0.08-3.26-0.15-4.89-0.23l4.89,0.23Z M298.11,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM280.9,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM288.19,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM293.1,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM273.7,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM277.92,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM285.34,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM295.53,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM288.72,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM304.75,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM280.9,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM284.14,105.15c-1.63-0.08-3.26-0.15-4.89-0.23l4.89,0.23ZM298.11,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM288.19,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM308.28,103.41c1.54,0.13,3.09,0.25,4.64,0.38l-4.64-0.38Z M285.34,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM288.72,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM293.1,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM295.53,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM304.75,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM273.7,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06ZM277.92,103.49c1.65,0.02,3.3,0.04,4.95,0.06l-4.95-0.06Z" />
+                    <path class="land" d="M495.2,205.1c0.04,0.01,0.08,0.03,0.12,0.05l-0.12-0.05ZM521.8,206.5c-0.15-0.08-0.29-0.15-0.44-0.22l0.44,0.22ZM521.8,206.5c-0.15-0.08-0.29-0.15-0.44-0.22l0.44,0.22Z M535.1,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06ZM545.9,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M529.1,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06ZM541.4,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M551.4,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M558.1,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M565.4,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M573.1,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M581.4,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M588.9,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M597.5,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M605.5,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z M614.5,205.2c0.16,0.02,0.32,0.04,0.48,0.06l-0.48-0.06Z" />
+                </svg>
+            </div>
+            
+            <div class="map-pin" data-country="usa" style="top: 35%; left: 20%;"></div>
+            <div class="map-pin" data-country="uk" style="top: 25%; left: 45%;"></div>
+            <div class="map-pin" data-country="germany" style="top: 30%; left: 52%;"></div>
+            <div class="map-pin" data-country="japan" style="top: 30%; left: 80%;"></div>
+            <div class="map-pin" data-country="australia" style="top: 70%; left: 85%;"></div>
+        </div>
+
+        <div id="project-info-card" class="project-info-card">
+            <button class="close-card-btn">&times;</button>
+            <div class="card-header">
+                <span class="card-country-flag"></span>
+                <h3 class="card-country-name"></h3>
+            </div>
+            
+            <div class="country-map-detail">
+                <h4>Service Locations in <span class="card-country-name-small"></span></h4>
+                <div id="country-detail-map" class="sub-map-placeholder">
+                    <p class="initial-msg">Click a country pin to see localized service area mapping.</p>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <p class="card-service-name"></p>
+                <div class="card-rating"></div>
+                <p class="card-summary"></p>
+                <span class="card-status-badge"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+/* --- 💻 JavaScript: Data and Logic (Kept same) --- */
+document.addEventListener('DOMContentLoaded', () => {
+    const mapPins = document.querySelectorAll('.map-pin');
+    const infoCard = document.getElementById('project-info-card');
+    const closeBtn = infoCard.querySelector('.close-card-btn');
+    const detailMapContainer = document.getElementById('country-detail-map');
+    let activePin = null; 
+
+    // --- Project and Service Data ---
+    const projectData = {
+        usa: {
+            flag: '🇺🇸', country: 'United States', service: 'Enterprise Cloud Migration', rating: 5, status: 'Successful Completion',
+            summary: 'Seamless transition to custom Kubernetes architecture, resulting in a 30% reduction in latency and improved scalability.',
+            serviceAreas: ['New York (East Coast)', 'California (West Coast)', 'Texas (Data Hub)']
+        },
+        uk: {
+            flag: '🇬🇧', country: 'United Kingdom', service: 'AI-Powered Data Analytics Platform', rating: 4.8, status: 'Project Delivered',
+            summary: 'Developed and deployed a custom AI solution for market trend prediction, boosting client revenue by 15%.',
+            serviceAreas: ['London', 'Manchester', 'Edinburgh']
+        },
+        germany: {
+            flag: '🇩🇪', country: 'Germany', service: 'IoT Fleet Management System', rating: 4.9, status: 'Ongoing Support',
+            summary: 'Implemented a real-time IoT solution for vehicle tracking and predictive maintenance, enhancing operational efficiency.',
+            serviceAreas: ['Berlin', 'Munich', 'Frankfurt', 'Hamburg']
+        },
+        japan: {
+            flag: '🇯🇵', country: 'Japan', service: 'Cybersecurity Audit & Penetration Testing', rating: 5, status: 'Secure & Optimized',
+            summary: 'Comprehensive security audit identified critical vulnerabilities, followed by robust protection implementation.',
+            serviceAreas: ['Tokyo', 'Osaka']
+        },
+        australia: {
+            flag: '🇦🇺', country: 'Australia', service: 'E-commerce Platform Development', rating: 4.7, status: 'Launched Successfully',
+            summary: 'Built a high-performance, scalable e-commerce site with custom payment gateway integrations and advanced analytics.',
+            serviceAreas: ['Sydney', 'Melbourne', 'Perth']
+        }
+    };
+
+    // --- Utility Function to update Pin State ---
+    const updatePinState = (newActivePin) => {
+        mapPins.forEach(p => p.classList.remove('active'));
+        if (newActivePin) {
+            newActivePin.classList.add('active');
+        }
+    };
+
+    // --- Function to generate Service Dots ---
+    const generateServiceDots = (areas) => {
+        let html = '';
+        areas.forEach(area => {
+            html += <div class="service-dot"><span class="service-dot-icon"></span>${area}</div>;
+        });
+        return html;
+    };
+
+
+    // --- Pin Click Handler ---
+    mapPins.forEach(pin => {
+        pin.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            const countryId = pin.dataset.country;
+            const data = projectData[countryId];
+
+            if (infoCard.classList.contains('active') && activePin === pin) {
+                infoCard.classList.remove('active');
+                updatePinState(null);
+                detailMapContainer.innerHTML = <p class="initial-msg">Click a country pin to see localized service area mapping.</p>;
+                activePin = null;
+                return;
+            }
+
+            if (data) {
+                updatePinState(pin);
+                activePin = pin;
+
+                // Populate Card
+                infoCard.querySelector('.card-country-flag').textContent = data.flag;
+                infoCard.querySelector('.card-country-name').textContent = data.country;
+                infoCard.querySelector('.card-service-name').textContent = Service: ${data.service};
+                infoCard.querySelector('.card-summary').textContent = "${data.summary}";
+                infoCard.querySelector('.card-status-badge').textContent = data.status;
+                
+                infoCard.querySelector('.country-map-detail h4').innerHTML = `Service Locations in <span class="card-country-name-small">${data.country}</span>;
+
+                // Populate Service Detail Map
+                detailMapContainer.innerHTML = generateServiceDots(data.serviceAreas);
+
+
+                // Generate star ratings
+                const ratingContainer = infoCard.querySelector('.card-rating');
+                ratingContainer.innerHTML = ''; 
+                const fullStars = Math.floor(data.rating);
+                const hasHalfStar = data.rating % 1 !== 0;
+
+                for (let i = 0; i < fullStars; i++) {
+                    ratingContainer.innerHTML += '⭐';
+                }
+                if (hasHalfStar) {
+                    ratingContainer.innerHTML += '🌟';
+                }
+                ratingContainer.innerHTML += ` ${data.rating.toFixed(1)}`;
+
+                infoCard.classList.add('active');
+            }
+        });
+    });
+
+    // --- Close Card Handlers ---
+    closeBtn.addEventListener('click', () => {
+        infoCard.classList.remove('active');
+        updatePinState(null);
+        detailMapContainer.innerHTML = <p class="initial-msg">Click a country pin to see localized service area mapping.</p>;
+        activePin = null; 
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!infoCard.contains(e.target) && !e.target.closest('.map-pin') && infoCard.classList.contains('active')) {
+            infoCard.classList.remove('active');
+            updatePinState(null);
+            detailMapContainer.innerHTML = <p class="initial-msg">Click a country pin to see localized service area mapping.</p>;
+            activePin = null;
+        }
+    });
+});
+</script>
+
+</body>
+</html>

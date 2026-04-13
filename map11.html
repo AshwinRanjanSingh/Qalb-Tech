@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Global Coverage - Light Theme</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(180deg, #e8f4ff, #ffffff);
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    #globe-container {
+      flex: 2;
+      position: relative;
+    }
+
+    #sidebar {
+      flex: 1;
+      background: #f8fbff;
+      padding: 20px;
+      box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #d0e4ff;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .continent {
+      display: flex;
+      align-items: center;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .continent:hover {
+      background: #e6f0ff;
+      transform: scale(1.03);
+    }
+
+    .color-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+  <div id="sidebar">
+    <h2>🌎 Continents</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Search continent..." id="search">
+    </div>
+    <div id="continent-list"></div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+
+  <script>
+    const continentColors = {
+      Asia: "#66c2ff",
+      Europe: "#ffa500",
+      Africa: "#00cc88",
+      North_America: "#ff6666",
+      South_America: "#66ff66",
+      Australia: "#ffcc00",
+      Antarctica: "#b3e6ff"
+    };
+
+    const globe = Globe()
+      .globeImageUrl("//unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+      .backgroundColor("#e8f4ff")
+      .polygonsData([])
+      .polygonCapColor(feat => continentColors[feat.properties.CONTINENT] || "#cccccc")
+      .polygonSideColor(() => "rgba(255,255,255,0.3)")
+      .polygonStrokeColor(() => "#ffffff")
+      .polygonLabel(({ properties: d }) => `
+        <b>${d.CONTINENT}</b>
+      `)
+      .onPolygonClick(d => {
+        const cont = d.properties.CONTINENT;
+        alert(`You clicked on ${cont.replace("_", " ")}`);
+      })(document.getElementById("globe-container"));
+
+    // Load GeoJSON continents
+    fetch("https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson")
+      .then(res => res.json())
+      .then(data => {
+        // Map continents (group by continent)
+        const continents = {};
+        data.features.forEach(f => {
+          const cont = f.properties.CONTINENT.replace(" ", "_");
+          if (!continents[cont]) continents[cont] = [];
+          continents[cont].push(f);
+        });
+
+        const merged = Object.entries(continents).map(([cont, features]) => ({
+          type: "Feature",
+          properties: { CONTINENT: cont },
+          geometry: {
+            type: "GeometryCollection",
+            geometries: features.map(f => f.geometry)
+          }
+        }));
+
+        globe.polygonsData(merged);
+
+        // Sidebar population
+        const list = document.getElementById("continent-list");
+        Object.keys(continentColors).forEach(cont => {
+          const div = document.createElement("div");
+          div.className = "continent";
+          div.innerHTML = `
+            <div class="color-dot" style="background:${continentColors[cont]}"></div>
+            <span>${cont.replace("_", " ")}</span>
+          `;
+          div.onclick = () => alert(`You selected ${cont.replace("_", " ")}`);
+          list.appendChild(div);
+        });
+      });
+  </script>
+</body>
+</html>

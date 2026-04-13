@@ -1,0 +1,190 @@
+<!Doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country Selector - Blue & White Edition</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8fbff;
+    color: #1a1a1a;
+  }
+
+  header {
+    text-align: center;
+    background: linear-gradient(90deg, #0066ff, #66b3ff);
+    color: white;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .search-box {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .search-box input {
+    width: 60%;
+    padding: 10px 15px;
+    border: 1px solid #cce0ff;
+    border-radius: 25px;
+    outline: none;
+    font-size: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: 0.3s;
+  }
+
+  .search-box input:focus {
+    border-color: #66a3ff;
+    box-shadow: 0 0 8px rgba(0,102,255,0.3);
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .tabs button {
+    background-color: #e6f0ff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: #0066ff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tabs button.active,
+  .tabs button:hover {
+    background-color: #0066ff;
+    color: white;
+  }
+
+  .countries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+  }
+
+  .country-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    width: 160px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .country-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+
+  .country-card img {
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    object-fit: cover;
+  }
+
+  .country-card span {
+    display: block;
+    color: #0047b3;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🌍 Country Selector</h1>
+  </header>
+
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search for a country...">
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-region="all">All</button>
+      <button data-region="Asia">Asia</button>
+      <button data-region="Europe">Europe</button>
+      <button data-region="Americas">Americas</button>
+      <button data-region="Africa">Africa</button>
+      <button data-region="Oceania">Oceania</button>
+    </div>
+
+    <div class="countries" id="countriesGrid"></div>
+  </div>
+
+<script>
+const countries = [
+  { name: 'United States', iso: 'us', region: 'Americas' },
+  { name: 'Canada', iso: 'ca', region: 'Americas' },
+  { name: 'United Kingdom', iso: 'gb', region: 'Europe' },
+  { name: 'Australia', iso: 'au', region: 'Oceania' },
+  { name: 'Germany', iso: 'de', region: 'Europe' },
+  { name: 'France', iso: 'fr', region: 'Europe' },
+  { name: 'Japan', iso: 'jp', region: 'Asia' },
+  { name: 'China', iso: 'cn', region: 'Asia' },
+  { name: 'India', iso: 'in', region: 'Asia' },
+  { name: 'Brazil', iso: 'br', region: 'Americas' }
+];
+
+const grid = document.getElementById('countriesGrid');
+const searchInput = document.getElementById('searchInput');
+const tabs = document.querySelectorAll('.tabs button');
+let activeRegion = 'all';
+
+function render() {
+  const query = searchInput.value.toLowerCase();
+  grid.innerHTML = '';
+  const filtered = countries.filter(c => {
+    if (activeRegion !== 'all' && c.region !== activeRegion) return false;
+    if (query && !c.name.toLowerCase().includes(query)) return false;
+    return true;
+  });
+  filtered.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'country-card';
+    card.innerHTML = `
+      <img src="https://flagcdn.com/w80/${c.iso}.png" alt="${c.name}">
+      <span>${c.name}</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+searchInput.addEventListener('input', render);
+tabs.forEach(tab => tab.addEventListener('click', () => {
+  tabs.forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  activeRegion = tab.dataset.region;
+  render();
+}));
+
+render();
+</script>
+</body>
+</html>

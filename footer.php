@@ -15,7 +15,8 @@
                 <div class="col-lg-4 col-md-6 footer-about">
                     <div class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
                         <a href="index.php" class="navbar-brand">
-                            <img src="img/qalb_tech_logo_white_text (2).png" alt="" width="150px" height="150px" style="position: relative; left: 10px;">
+                            <img src="img/qalb_tech_logo_white_text (2).webp" alt="" width="150px" height="150px" style="position: relative; left: 10px;">
+                            <!-- <P style="font-size:12px; width: 70px; color:#7DF9FF;">Simplifying Tech Applyfying Success</P> -->
                             <!-- <h1 class="m-0 text-white"><i class="fa fa-user-tie me-2"></i>Startup</h1> -->
                         </a>
                         <p class=" mb-25">At QALB TECH, we deliver smart and reliable IT solutions that help businesses grow, connect, and succeed in the digital era.</p>
@@ -46,10 +47,10 @@
                                 <p class="mb-0">+012 345 67890</p>
                             </div>
                             <div class="d-flex mt-4">
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="https://x.com/qalbtech06"><i class="fab fa-twitter fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="https://www.facebook.com/profile.php?id=61583856401862"><i class="fab fa-facebook-f fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square me-2" href="https://www.linkedin.com/company/qalbtech/"><i class="fab fa-linkedin-in fw-normal"></i></a>
+                                <a class="btn btn-primary btn-square" href="https://www.instagram.com/qalbtech06/"><i class="fab fa-instagram fw-normal"></i></a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
@@ -59,7 +60,8 @@
                             <div class="link-animated d-flex flex-column justify-content-start">
                                 <a class="text-light mb-2" href="index.php"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
                                 <a class="text-light mb-2" href="about.php"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                                <a class="text-light mb-2" href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <!-- <a class="text-light mb-2" href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a> -->
+                                 <a class="text-light " href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Services</a>
                                 <a class="text-light mb-2" href="feature.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our feature</a>
                                 <a class="text-light mb-2" href="quote.php"><i class="bi bi-arrow-right text-primary me-2"></i>Free Quote</a>
                                 <a class="text-light mb-2" href="terms&condition.php"><i class="bi bi-arrow-right text-primary me-2"></i>Terms & Conditions</a>
@@ -76,7 +78,9 @@
                             <div class="link-animated d-flex flex-column justify-content-start">
                                 <a class="text-light mb-2" href="index.php"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
                                 <a class="text-light mb-2" href="about.php"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                                <a class="text-light mb-2" href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <!-- <a class="text-light mb-2" href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a> -->
+                        <!-- <a href="#" class="nav-link "="dropdown">Services</a> -->
+                                    <a class="text-light" href="service.php"><i class="bi bi-arrow-right text-primary me-2"></i>Services</a>
                                 <a class="text-light mb-2" href="feature.php"><i class="bi bi-arrow-right text-primary me-2"></i>Our feature</a>
                                 <a class="text-light mb-2" href="quote.php"><i class="bi bi-arrow-right text-primary me-2"></i>Free Quote</a>
                                 <a class="text-light mb-2" href="terms&condition.php"><i class="bi bi-arrow-right text-primary me-2"></i>Terms & Conditions</a>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌍 Global Branch Dashboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #000;
+      color: #fff;
+    }
+
+    /* Left: Globe Section */
+    #globeSection {
+      flex: 2;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #000814, #000);
+    }
+
+    #globeViz {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Right: Info Panel */
+    #infoPanel {
+      flex: 1;
+      background: rgba(20, 25, 35, 0.9);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #searchBox {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      margin-bottom: 15px;
+      background: #111a2b;
+      color: white;
+    }
+
+    #continentList {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #0d6efd #111;
+      padding-right: 5px;
+    }
+
+    .continent {
+      background: #0d6efd;
+      color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .continent:hover {
+      background: #0b5ed7;
+    }
+
+    .country-list {
+      display: none;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    .country {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      margin: 4px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .country:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Left: Globe -->
+  <div id="globeSection">
+    <div id="globeViz"></div>
+  </div>
+
+  <!-- Right: Info Panel -->
+  <div id="infoPanel">
+    <input id="searchBox" type="text" placeholder="🔍 Search country..." />
+
+    <div id="continentList">
+      <div class="continent">Asia
+        <div class="country-list">
+          <div class="country">India</div>
+          <div class="country">China</div>
+          <div class="country">Japan</div>
+        </div>
+      </div>
+      <div class="continent">Europe
+        <div class="country-list">
+          <div class="country">France</div>
+          <div class="country">Germany</div>
+          <div class="country">Italy</div>
+        </div>
+      </div>
+      <div class="continent">North America
+        <div class="country-list">
+          <div class="country">USA</div>
+          <div class="country">Canada</div>
+          <div class="country">Mexico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ 3D Globe Script -->
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+
+    const container = document.getElementById("globeViz");
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 2;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
+
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load(
+      "https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg"
+    );
+    const geometry = new THREE.SphereGeometry(0.8, 64, 64);
+    const material = new THREE.MeshPhongMaterial({ map: earthTexture });
+    const earth = new THREE.Mesh(geometry, material);
+    scene.add(earth);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enableZoom = true;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      earth.rotation.y += 0.0018;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("resize", () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // ✅ Interactivity for continents and countries
+    document.querySelectorAll(".continent").forEach(continent => {
+      continent.addEventListener("click", () => {
+        const countryList = continent.querySelector(".country-list");
+        countryList.style.display = countryList.style.display === "block" ? "none" : "block";
+      });
+    });
+
+    // ✅ Search functionality
+    const searchBox = document.getElementById("searchBox");
+    searchBox.addEventListener("input", () => {
+      const term = searchBox.value.toLowerCase();
+      document.querySelectorAll(".country").forEach(country => {
+        country.style.display = country.textContent.toLowerCase().includes(term) ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>

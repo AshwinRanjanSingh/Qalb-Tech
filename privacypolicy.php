@@ -1,4 +1,4 @@
-php<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,6 +26,83 @@ php<!DOCTYPE html>
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <style>
+    /* --- 1. General Dropdown Menu Styling and Hiding --- */
+
+/* Initially hide both the main dropdown and all submenus */
+.dropdown-menu,
+.subdropdown {
+    display: none;
+    position: absolute;
+    /* Basic styling to make the menu visible */
+    background-color: #ffffff; /* Use your desired background color */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; /* Ensure it appears above other content */
+    min-width: 250px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Make sure the main dropdown is positioned under the Services link */
+.nav-item.dropdown {
+    position: relative; /* Crucial for positioning the dropdown-menu */
+}
+
+/* Position the main dropdown menu */
+.nav-item.dropdown .dropdown-menu {
+    top: 100%; /* Place it right below the main Services link */
+    left: 0;
+}
+
+
+/* --- 2. Multi-Level Submenu Positioning and Hiding --- */
+
+/* The parent item for the submenu needs relative positioning */
+.has-subdropdown {
+    position: relative; 
+}
+
+/* Position the submenu */
+.has-subdropdown .subdropdown {
+    top: 0; 
+    left: 100%; /* Pushes the submenu to the right of its parent item */
+    /* Add a slight horizontal shift to prevent jitter on hover */
+    margin-left: 1px; 
+}
+
+/* Style the submenu links to look like dropdown items */
+.subdropdown a {
+    display: block;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #000;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.subdropdown a:hover {
+    color: var(--primary); /* Use your primary theme color */
+    background-color: #f8f9fa;
+}
+
+
+/* --- 3. Hover Logic (Showing the Menus) --- */
+
+/* A. Show the main dropdown menu when hovering over 'Services' */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+/* B. Show the submenu when hovering over the parent item (e.g., 'CRM Solutions') */
+.has-subdropdown:hover > .subdropdown {
+    display: block;
+}
+</style>
     <style>
         * {
             margin: 0;
@@ -436,7 +513,7 @@ php<!DOCTYPE html>
 <?php
 include('header.php');
 ?>
-        <div class="container-fluid bg-primary py-5 bg-header3" style="margin-bottom: 90px;">
+        <div class="container-fluid bg-primary py-5 bg-header3 " style="margin-bottom: 90px;">
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
                     <h1 class="display-4 text-white animated zoomIn" style="margin-top: 90px;">Privacy Policy</h1>
@@ -648,23 +725,23 @@ include('header.php');
         </div>
     </div>
         <!-- Vendor Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <!-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5 mb-5">
             <div class="bg-white">
                 <div class="owl-carousel vendor-carousel">
-                    <img src="img/vendor-1.jpg" alt="">
-                    <img src="img/vendor-2.jpg" alt="">
-                    <img src="img/vendor-3.jpg" alt="">
-                    <img src="img/vendor-4.jpg" alt="">
-                    <img src="img/vendor-5.jpg" alt="">
-                    <img src="img/vendor-6.jpg" alt="">
-                    <img src="img/vendor-7.jpg" alt="">
-                    <img src="img/vendor-8.jpg" alt="">
-                    <img src="img/vendor-9.jpg" alt="">
+                    <img src="img/vendor-1.webp" alt="">
+                    <img src="img/vendor-2.webp" alt="">
+                    <img src="img/vendor-3.webp" alt="">
+                    <img src="img/vendor-4.webp" alt="">
+                    <img src="img/vendor-5.webp" alt="">
+                    <img src="img/vendor-6.webp" alt="">
+                    <img src="img/vendor-7.webp" alt="">
+                    <img src="img/vendor-8.webp" alt="">
+                    <img src="img/vendor-9.webp" alt="">
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Vendor End -->
 <?php
 include('footer.php');

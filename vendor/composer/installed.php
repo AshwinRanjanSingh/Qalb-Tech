@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'qalbtech/qalbtech',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '9c4a336f74a1ddadbc0b0f2ea9011e20d5e0a08b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -20,9 +20,9 @@
             'dev_requirement' => false,
         ),
         'qalbtech/qalbtech' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '9c4a336f74a1ddadbc0b0f2ea9011e20d5e0a08b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

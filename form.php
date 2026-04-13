@@ -37,7 +37,9 @@
 // }
 
 session_start();
-
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -55,14 +57,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'ashwinranjan.singh@gmail.com';
-        $mail->Password = 'bukg kwmp pswe irhf';
+        $mail->Username = 'qalbtech06@gmail.com';
+        $mail->Password = 'xcfh kqqi mdla fuec';
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
         $mail->setFrom($email, 'QALB TECH');
         $mail->addReplyTo($email, $name);
-        $mail->addAddress('ashwinranjan.singh@gmail.com');
+        $mail->addAddress('qalbtech06@gmail.com');
 
         $mail->isHTML(false);
         $mail->Subject = 'New Quote Request from Website';
